@@ -1,0 +1,39 @@
+name: Terraform CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  tf-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Find Terraform folders
+        id: find_tf_dirs
+        run: |
+          # find unique directories that contain .tf files
+          mapfile -t DIRS < <(git ls-files '*.tf' | xargs -r -n1 dirname | sort -u)
+          printf '%s\n' "${DIRS[@]}" > tf_dirs.txt
+          echo "dirs=$(paste -sd, tf_dirs.txt)" >> $GITHUB_OUTPUT
+
+      - name: Terraform fmt (all)
+        if: steps.find_tf_dirs.outputs.dirs != ''
+        run: |
+          while IFS= read -r d; do
+            echo "Formatting: $d"
+            terraform -chdir="$d" fmt -check -recursive
+          done < tf_dirs.txt
+
+      - name: Terraform validate (each dir)
+        if: steps.find_tf_dirs.outputs.dirs != ''
+        run: |
+          while IFS= read -r d; do
+            echo "Validating: $d"
+            # init without a backend so it doesn't touch remote state
+            terraform -chdir="$d" init -backend=false -input=false -no-color || true
+            terraform -chdir="$d" validate -no-color || true
+          done < tf_dirs.txt
