@@ -4,8 +4,4 @@
   // Disable overly strict rules for documentation readability
   "MD013": false,  // Line length rule (allows lines >80 chars)
   "MD033": false   // Inline HTML rule (lets you use <br>, badges, etc.)
-
-  // You can also customize more rules here later, e.g.:
-  // "MD041": false,  // Allow missing first-line H1 heading
-  // "MD036": false   // Allow emphasis used instead of headings
 }
