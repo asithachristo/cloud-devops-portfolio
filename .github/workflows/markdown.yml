@@ -1,18 +1,11 @@
-name: Markdown Lint
-on:
-  push:
-  pull_request:
-
-jobs:
-  mdl:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v16
-        with:
-          globs: |
-            **/*.md
 {
-  "MD013": false,   // disable line-length rule
-  "MD033": false    // disable inline-HTML rule (optional)
+  "default": true,
+
+  // Disable overly strict rules for documentation readability
+  "MD013": false,  // Line length rule (allows lines >80 chars)
+  "MD033": false   // Inline HTML rule (lets you use <br>, badges, etc.)
+
+  // You can also customize more rules here later, e.g.:
+  // "MD041": false,  // Allow missing first-line H1 heading
+  // "MD036": false   // Allow emphasis used instead of headings
 }
