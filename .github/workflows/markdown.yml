@@ -1,7 +1,5 @@
 {
   "default": true,
-
-  // Disable overly strict rules for documentation readability
-  "MD013": false,  // Line length rule (allows lines >80 chars)
-  "MD033": false   // Inline HTML rule (lets you use <br>, badges, etc.)
+  "MD013": false,
+  "MD033": false
 }
